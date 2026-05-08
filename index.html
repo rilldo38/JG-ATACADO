@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>JG ATACADO - Catálogos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .catalogs-list {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .catalog-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .catalog-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .catalog-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .catalog-info {
+            flex: 1;
+        }
+
+        .catalog-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .catalog-description {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .catalog-link {
+            color: #667eea;
+            font-size: 0.85em;
+            text-decoration: none;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: center;
+            color: #666;
+            font-size: 0.8em;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .social-link {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-content h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.confirm {
+            background: #667eea;
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #5a67d8;
+        }
+
+        .modal-btn.cancel {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #d0d0d0;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .catalog-item {
+                padding: 12px;
+            }
+            
+            .catalog-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2em;
+            }
+            
+            .catalog-title {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">JG</div>
+            <h1>JG ATACADO</h1>
+            <p>Acesse nossos catálogos oficiais</p>
+        </div>
+
+        <div class="catalogs-list" id="catalogsList">
+            <!-- Catálogos serão inseridos aqui via JavaScript -->
+        </div>
+
+        <div class="footer">
+            <p>📱 Siga-nos nas redes sociais</p>
+            <div class="social-links">
+                <a href="#" class="social-link" id="instagramLink">📷 Instagram</a>
+            </div>
+            <p style="margin-top: 10px;">© 2024 JG ATACADO - Todos os direitos reservados</p>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>🔗 Abrir link externo</h3>
+            <p>Você será redirecionado para:</p>
+            <p><strong id="modalLinkText"></strong></p>
+            <p>Deseja continuar?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" onclick="confirmRedirect()">Continuar</button>
+                <button class="modal-btn cancel" onclick="closeModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de dados dos catálogos JG ATACADO
+        const catalogs = [
+            {
+                id: 1,
+                title: "Catálogo JG ATACADO Oficial",
+                description: "Acesse todos os produtos com preços especiais",
+                link: "https://jgatacadooficial.com/products/?type=onsite&qr-id=a000c714-3693-463c-ab7d-0af64b30cb61",
+                icon: "📦"
+            },
+            {
+                id: 2,
+                title: "Catálogo JG Imports Oficial",
+                description: "Produtos importados com qualidade garantida",
+                link: "https://jgimportsoficial.com/products/?type=onsite&qr-id=a000c76f-1258-42fc-a77f-b3b3a6387d14",
+                icon: "🌍"
+            },
+            {
+                id: 3,
+                title: "Instagram JG ATACADO",
+                description: "Siga nosso perfil oficial e fique por dentro das novidades",
+                link: "https://www.instagram.com/jgatacadooficial?igsh=MTNyNDVjNDl1b29j",
+                icon: "📷"
+            }
+        ];
+
+        let currentCatalog = null;
+
+        // Função para renderizar os catálogos
+        function renderCatalogs() {
+            const catalogsList = document.getElementById('catalogsList');
+            
+            catalogsList.innerHTML = catalogs.map(catalog => `
+                <div class="catalog-item" onclick="openCatalog(${catalog.id})">
+                    <div class="catalog-icon">${catalog.icon}</div>
+                    <div class="catalog-info">
+                        <div class="catalog-title">${catalog.title}</div>
+                        <div class="catalog-description">${catalog.description}</div>
+                        <div class="catalog-link">🔗 Clique para acessar</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Função para abrir catálogo
+        function openCatalog(id) {
+            currentCatalog = catalogs.find(c => c.id === id);
+            if (currentCatalog) {
+                document.getElementById('modalLinkText').textContent = currentCatalog.title;
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        // Função para confirmar redirecionamento
+        function confirmRedirect() {
+            if (currentCatalog && currentCatalog.link) {
+                window.open(currentCatalog.link, '_blank');
+                closeModal();
+            }
+        }
+
+        // Função para fechar modal
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+            currentCatalog = null;
+        }
+
+        // Função específica para abrir Instagram
+        function openInstagram() {
+            const instagramCatalog = catalogs.find(c => c.id === 3);
+            if (instagramCatalog) {
+                currentCatalog = instagramCatalog;
+                document.getElementById('modalLinkText').textContent = "Instagram JG ATACADO";
+                document.getElementById('modal').style.display = 'flex';
+            }
+        }
+
+        // Configurar link do Instagram no footer
+        document.getElementById('instagramLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            openInstagram();
+        });
+
+        // Fechar modal ao clicar fora
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Inicializar a lista
+        renderCatalogs();
+
+        // Adicionar efeito de animação nos itens
+        const style = document.createElement('style');
+        style.textContent = `
+            .catalog-item {
+                animation: fadeIn 0.3s ease-out;
+            }
+            
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        console.log('JG ATACADO App - Catálogos disponíveis:', catalogs.length);
+    </script>
+</body>
+</html>
